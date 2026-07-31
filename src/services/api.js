@@ -6,7 +6,7 @@ import axios from "axios";
  * Ex: VITE_API_URL=https://seu-n8n.exemplo.com/webhook
  */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5678/webhook",
+  baseURL: import.meta.env.VITE_API_URL || "https://n8n-n8n-30edfb-178-253-250-81.sslip.io/webhook-test/c70d6833-25db-4bff-9796-377f3bc370a3",
   timeout: 15000,
   headers: {
     "Content-Type": "application/json",
