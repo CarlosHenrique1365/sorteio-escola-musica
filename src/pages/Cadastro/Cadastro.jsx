@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiUser, FiPhone, FiShare2, FiList } from "react-icons/fi";
+import { FiUser, FiPhone, FiMusic, FiShare2, FiList } from "react-icons/fi";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import WaveBackground from "../../components/WaveBackground/WaveBackground";
@@ -19,7 +19,7 @@ const TITLE = "Sua música começa aqui";
 
 export default function Cadastro() {
   const words = useWordReveal(TITLE);
-  const [form, setForm] = useState({ nome: "", telefone: "" });
+  const [form, setForm] = useState({ nome: "", telefone: "", instrumento: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -34,6 +34,9 @@ export default function Cadastro() {
     if (form.telefone.replace(/\D/g, "").length < 10) {
       nextErrors.telefone = "Informe um telefone válido com DDD.";
     }
+    if (!form.instrumento.trim()) {
+      nextErrors.instrumento = "Conte pra gente seu instrumento favorito.";
+    }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   }
@@ -46,8 +49,25 @@ export default function Cadastro() {
     setLoading(true);
     try {
       const data = await cadastrarParticipante(form);
+
+      // Contrato real do api.js:
+      //  - Sucesso:        { sucesso: true,  cadastrado: false, numero, nome, mensagem }
+      //  - Já cadastrado:  { sucesso: false, cadastrado: true,  numero, nome, mensagem }
+      if (data.cadastrado) {
+        setSubmitError(
+          data.mensagem ||
+            `Este telefone já está cadastrado${
+              data.numero != null ? ` com o número ${formatParticipantNumber(data.numero)}` : ""
+            }.`
+        );
+        return;
+      }
+
       setResult(data);
     } catch {
+      // Erro de rede real (sem resposta do servidor) — cadastrarParticipante
+      // já trata respostas de erro do n8n com corpo JSON, então chegar aqui
+      // significa que não houve resposta alguma.
       setSubmitError("Não foi possível concluir seu cadastro agora. Tente novamente em instantes.");
     } finally {
       setLoading(false);
@@ -150,6 +170,17 @@ export default function Cadastro() {
                       setForm((prev) => ({ ...prev, telefone: formatPhone(event.target.value) }))
                     }
                     error={errors.telefone}
+                    required
+                  />
+                  <Input
+                    label="Instrumento favorito"
+                    icon={FiMusic}
+                    placeholder="Ex: Violão, Piano, Bateria..."
+                    value={form.instrumento}
+                    onChange={(event) =>
+                      setForm((prev) => ({ ...prev, instrumento: event.target.value }))
+                    }
+                    error={errors.instrumento}
                     required
                   />
                   {submitError && (

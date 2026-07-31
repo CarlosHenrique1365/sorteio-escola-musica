@@ -45,9 +45,9 @@ api.interceptors.request.use((config) => {
  * O componente que chamar essa função deve checar `data.cadastrado`
  * para saber se é um cadastro novo ou uma tentativa duplicada.
  */
-export async function cadastrarParticipante({ nome, telefone }) {
+export async function cadastrarParticipante({ nome, telefone, instrumento }) {
   try {
-    const { data } = await api.post("/cadastro", { nome, telefone });
+    const { data } = await api.post("/cadastro", { nome, telefone, instrumento });
     return data;
   } catch (error) {
     // Se o n8n respondeu com um status de erro (ex.: 400) mas ainda
