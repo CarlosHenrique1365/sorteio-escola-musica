@@ -5,8 +5,21 @@ import axios from "axios";
  * Configure VITE_API_URL no seu .env apontando para o webhook do n8n.
  * Ex: VITE_API_URL=https://seu-n8n.exemplo.com/webhook
  */
+/**
+ * Instância central do Axios.
+ * Configure VITE_API_URL no seu .env apontando para o webhook do n8n.
+ * Ex: VITE_API_URL=https://seu-n8n.exemplo.com/webhook
+ *
+ * IMPORTANTE: o path do node Webhook no n8n foi configurado como "cadastro"
+ * (sem UUID, sem "webhook-test" duplicado). A URL final chamada é:
+ *   {baseURL}/cadastro
+ * Então a baseURL deve terminar em ".../webhook" (produção) ou
+ * ".../webhook-test" (enquanto testa no editor do n8n) — nunca os dois juntos.
+ */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://n8n-n8n-30edfb-178-253-250-81.sslip.io/webhook-test/c70d6833-25db-4bff-9796-377f3bc370a3/webhook-test",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    "https://n8n-n8n-30edfb-178-253-250-81.sslip.io/webhook-test/c70d6833-25db-4bff-9796-377f3bc370a3/webhook-test",
   timeout: 15000,
   headers: {
     "Content-Type": "application/json",
@@ -22,10 +35,31 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-/** Cadastra um novo participante. Retorna { numero, nome, totalParticipantes }. */
+/**
+ * Cadastra um novo participante.
+ *
+ * Retorna sempre um objeto (nunca undefined), com dois formatos possíveis:
+ *  - Sucesso:        { sucesso: true,  cadastrado: false, numero, nome, mensagem }
+ *  - Já cadastrado:  { sucesso: false, cadastrado: true,  numero, nome, mensagem }
+ *
+ * O componente que chamar essa função deve checar `data.cadastrado`
+ * para saber se é um cadastro novo ou uma tentativa duplicada.
+ */
 export async function cadastrarParticipante({ nome, telefone }) {
-  const { data } = await api.post("/cadastro", { nome, telefone });
-  return data;
+  try {
+    const { data } = await api.post("/cadastro", { nome, telefone });
+    return data;
+  } catch (error) {
+    // Se o n8n respondeu com um status de erro (ex.: 400) mas ainda
+    // assim mandou um corpo JSON (ex.: telefone já cadastrado),
+    // usamos esse corpo em vez de deixar a exception estourar como undefined.
+    if (error.response?.data) {
+      return error.response.data;
+    }
+    // Erro de rede real (sem resposta do servidor) — repropaga para o
+    // componente tratar (ex.: mostrar "sem conexão com o servidor").
+    throw error;
+  }
 }
 
 /** Lista todos os participantes cadastrados. */
