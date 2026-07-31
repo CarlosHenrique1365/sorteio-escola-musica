@@ -53,16 +53,10 @@ export default function Cadastro() {
       // Contrato real do api.js:
       //  - Sucesso:        { sucesso: true,  cadastrado: false, numero, nome, mensagem }
       //  - Já cadastrado:  { sucesso: false, cadastrado: true,  numero, nome, mensagem }
-      if (data.cadastrado) {
-        setSubmitError(
-          data.mensagem ||
-            `Este telefone já está cadastrado${
-              data.numero != null ? ` com o número ${formatParticipantNumber(data.numero)}` : ""
-            }.`
-        );
-        return;
-      }
-
+      // Em ambos os casos exibimos o card de resultado — a única diferença
+      // é o texto de destaque, tratado direto no JSX via result.cadastrado.
+      // Se o n8n ainda não estiver enviando "numero" no caso de duplicidade,
+      // o card mostra "—" no lugar do número (ver formatParticipantNumber).
       setResult(data);
     } catch {
       // Erro de rede real (sem resposta do servidor) — cadastrarParticipante
@@ -202,8 +196,14 @@ export default function Cadastro() {
               transition={{ type: "spring", stiffness: 260, damping: 14 }}
             >
               <Card pianoStripes highlight className={styles.resultCard}>
-                <p className={styles.congrats}>Parabéns, {result.nome?.split(" ")[0] || form.nome.split(" ")[0]}!</p>
-                <span className={styles.numberLabel}>Seu número é</span>
+                <p className={styles.congrats}>
+                  {result.cadastrado
+                    ? `Você já está cadastrado, ${result.nome?.split(" ")[0] || form.nome.split(" ")[0]}!`
+                    : `Parabéns, ${result.nome?.split(" ")[0] || form.nome.split(" ")[0]}!`}
+                </p>
+                <span className={styles.numberLabel}>
+                  {result.cadastrado ? "Seu número da sorte é" : "Seu número é"}
+                </span>
                 <motion.span
                   className={styles.number}
                   initial={{ scale: 0.4, opacity: 0 }}
