@@ -1,27 +1,28 @@
 /* ============================================================
    DESIGN TOKENS — Identidade visual STUGIORE Escola de Música
-   Paleta oficial da marca (brandbook): navy italiano, verde e
-   vermelho. Estrutura de tokens mantida — só os valores mudaram.
+   TEMA CLARO. Paleta oficial da marca (navy, verde, vermelho),
+   reconstruída para fundo claro — texto, sombras e camadas
+   "glass" foram recalculados para manter contraste e legibilidade.
    ============================================================ */
 :root {
   /* Cores base */
-  --color-bg: #081420;
-  --color-panel: #0f2536;
-  --color-card: #123a58;
-  --color-border: #2f5670;
-  --color-text: #f7f1e8;
-  --color-text-secondary: #aec1cc;
-  --color-gold: #4dae4e;
-  --color-gold-hover: #63c064;
-  --color-accent: #1c6690;
+  --color-bg: #f5f8fa;
+  --color-panel: #eaf0f3;
+  --color-card: #ffffff;
+  --color-border: #d6e0e6;
+  --color-text: #013f61;
+  --color-text-secondary: #5c7384;
+  --color-gold: #2f8f3f;
+  --color-gold-hover: #3da84e;
+  --color-accent: #0f5a86;
   --color-error: #d72828;
-  --color-success: #2f9e52;
+  --color-success: #1f8c6a;
 
   /* Camadas translúcidas (glass) */
-  --glass-bg: rgba(1, 63, 97, 0.55);
-  --glass-border: rgba(77, 174, 78, 0.18);
-  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.45);
-  --shadow-gold-glow: 0 0 24px rgba(77, 174, 78, 0.35);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(1, 63, 97, 0.12);
+  --shadow-soft: 0 12px 40px rgba(15, 40, 60, 0.12);
+  --shadow-gold-glow: 0 0 24px rgba(47, 143, 63, 0.28);
 
   /* Tipografia */
   --font-display: "Batusa", "Fraunces", "Georgia", serif;
