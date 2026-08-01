@@ -202,7 +202,7 @@ export default function Cadastro() {
                     : `Parabéns, ${result.nome?.split(" ")[0] || form.nome.split(" ")[0]}!`}
                 </p>
                 <span className={styles.numberLabel}>
-                  {result.cadastrado ? "Seu número da sorte é" : "Seu número é"}
+                  {result.cadastrado ? "Seu número da sorte é " : "Seu número é "}
                 </span>
                 <motion.span
                   className={styles.number}
