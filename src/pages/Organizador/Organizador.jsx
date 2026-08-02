@@ -26,14 +26,21 @@ export default function Organizador() {
 
   useEffect(() => {
     async function loadData() {
-      try {
-        const [participantes, historicoData] = await Promise.all([
-          listarParticipantes(),
-          buscarHistorico(),
-        ]);
-        setTotalParticipantes(participantes.length);
-        setHistorico(historicoData);
-      } catch {
+      const [participantesResult, historicoResult] = await Promise.allSettled([
+        listarParticipantes(),
+        buscarHistorico(),
+      ]);
+
+      if (participantesResult.status === "fulfilled") {
+        setTotalParticipantes(participantesResult.value.length);
+      } else {
+        console.error("Falha ao buscar participantes:", participantesResult.reason);
+      }
+
+      if (historicoResult.status === "fulfilled") {
+        setHistorico(historicoResult.value);
+      } else {
+        console.error("Falha ao buscar histórico:", historicoResult.reason);
         setHistorico([]);
       }
     }
@@ -48,11 +55,18 @@ export default function Organizador() {
     setWinner(null);
     try {
       // O vencedor já vem definido pela API ANTES da animação começar.
-      const vencedor = await sortear({ ignorarGanhadores });
+      const resultado = await sortear({ ignorarGanhadores });
+
+      if (!resultado.sucesso) {
+        setDrawError(resultado.mensagem || "Não foi possível sortear agora.");
+        setDrawing(false);
+        return;
+      }
+
       setDrawing(false);
       setSpinning(true);
       setSpinKey((key) => key + 1);
-      setWinner(vencedor);
+      setWinner(resultado);
     } catch {
       setDrawError("Não foi possível realizar o sorteio agora. Tente novamente.");
       setDrawing(false);
@@ -109,10 +123,24 @@ export default function Organizador() {
             Sortear vencedor
           </Button>
 
+          {drawError && !winner && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{ width: "100%" }}
+            >
+              <Card className={styles.winnerCard}>
+                <span className={styles.trophy} aria-hidden="true">
+                  🎉 Sorteio encerrado
+                </span>
+                <span className={styles.winnerName}>{drawError}</span>
+              </Card>
+            </motion.div>
+          )}
+
           {winner && (
             <Roulette winnerNumber={winner.numero} spinKey={spinKey} onSpinEnd={handleSpinEnd} />
           )}
-
           <AnimatePresence>
             {winner && !spinning && (
               <motion.div
