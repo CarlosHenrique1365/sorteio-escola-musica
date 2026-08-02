@@ -24,37 +24,39 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+async function handleSubmit(event) {
+  event.preventDefault();
 
-    setError("");
-    setLoading(true);
+  console.log("FORMULÁRIO ANTES DO LOGIN:", form);
 
-    try {
-      // Executa o login
-      const resultado = await login(form);
+  setError("");
+  setLoading(true);
 
-      console.log("Resultado do login:", resultado);
+  try {
+    const resultado = await login(form);
 
-      // Só entra no organizador se o login for realmente aprovado
-      if (resultado?.sucesso === true) {
-        navigate("/organizador");
-        return;
-      }
+    console.log("RESULTADO DO LOGIN:", resultado);
 
-      // Se sucesso for false
-      setError(
-        resultado?.mensagem ||
-          "E-mail ou senha inválidos. Verifique e tente novamente."
-      );
-    } catch (error) {
-      console.error("Erro no login:", error);
-
-      setError("Não foi possível realizar o login. Tente novamente.");
-    } finally {
-      setLoading(false);
+    if (resultado?.sucesso === true) {
+      navigate("/organizador");
+      return;
     }
+
+    setError(
+      resultado?.mensagem ||
+        "E-mail ou senha inválidos."
+    );
+  } catch (error) {
+    console.error("ERRO NO LOGIN:", error);
+
+    setError(
+      error.message ||
+        "Não foi possível realizar o login."
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <div className={styles.page}>
