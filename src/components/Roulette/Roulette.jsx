@@ -5,44 +5,68 @@ import { formatParticipantNumber } from "../../utils/format";
 import styles from "./Roulette.module.css";
 
 const SLOT_WIDTH = 120;
-const SPIN_DURATION = 2.5; // segundos, conforme especificação
+const TOTAL_SLOTS = 20;
+const SPIN_DURATION = 2.5;
 
-/**
- * Roleta horizontal apenas ilustrativa.
- * O vencedor (`winnerNumber`) já deve ter sido recebido da API ANTES da
- * animação começar — este componente nunca decide o resultado, apenas o exibe.
- *
- * Se `winnerNumber` ainda não chegou (undefined/null), a roleta gira sem
- * assentar em nada, em vez de quebrar o render.
- */
-export default function Roulette({ winnerNumber, spinKey, onSpinEnd }) {
+export default function Roulette({
+  winnerNumber,
+  spinKey,
+  onSpinEnd,
+}) {
   const reducedMotion = usePrefersReducedMotion();
   const [hasSettled, setHasSettled] = useState(false);
 
-  const hasWinner = winnerNumber !== undefined && winnerNumber !== null;
+  const hasWinner =
+    winnerNumber !== undefined &&
+    winnerNumber !== null &&
+    winnerNumber !== "";
 
-  // Gera uma fita de números aleatórios terminando no vencedor real
-  // (ou só girando aleatoriamente, se o vencedor ainda não chegou).
+  // Cria os números que serão exibidos na roleta.
+  // O vencedor é colocado sempre no final.
   const reel = useMemo(() => {
-    const randomSlots = Array.from({ length: 34 }, () =>
-      formatParticipantNumber(Math.floor(Math.random() * 999999))
+    const numbers = Array.from(
+      { length: TOTAL_SLOTS },
+      () =>
+        formatParticipantNumber(
+          Math.floor(Math.random() * 999999)
+        )
     );
 
-    if (!hasWinner) {
-      return randomSlots;
+    if (hasWinner) {
+      numbers.push(
+        formatParticipantNumber(winnerNumber)
+      );
     }
 
-    return [...randomSlots, formatParticipantNumber(winnerNumber)];
-  }, [winnerNumber, hasWinner]);
+    return numbers;
+  }, [winnerNumber, hasWinner, spinKey]);
 
-  const winnerIndex = hasWinner ? reel.length - 1 : null;
-  const targetOffset = hasWinner
-    ? -(winnerIndex * SLOT_WIDTH + SLOT_WIDTH / 2)
-    : 0;
+  // O vencedor fica sempre no último slot.
+  const winnerIndex = hasWinner
+    ? reel.length - 1
+    : null;
 
+  // Calcula quanto a fita precisa se mover.
+const targetOffset = hasWinner
+  ? -(winnerIndex * SLOT_WIDTH) + SLOT_WIDTH / 2
+  : 0;
+
+  // Reinicia o estado visual sempre que começa um novo sorteio.
   useEffect(() => {
     setHasSettled(false);
   }, [spinKey]);
+
+  function handleAnimationComplete() {
+    if (!hasWinner) {
+      return;
+    }
+
+    setHasSettled(true);
+
+    if (onSpinEnd) {
+      onSpinEnd();
+    }
+  }
 
   return (
     <div className={styles.frame}>
@@ -50,23 +74,26 @@ export default function Roulette({ winnerNumber, spinKey, onSpinEnd }) {
         <motion.div
           className={styles.track}
           initial={{ x: 0 }}
-          animate={{ x: targetOffset }}
-          transition={
-            reducedMotion || !hasWinner
-              ? { duration: 0 }
-              : { duration: SPIN_DURATION, ease: [0.1, 0.7, 0.15, 1] }
-          }
-          onAnimationComplete={() => {
-            if (!hasWinner) return;
-            setHasSettled(true);
-            onSpinEnd?.();
+          animate={{
+            x: targetOffset,
           }}
+          transition={
+            reducedMotion
+              ? { duration: 0 }
+              : {
+                  duration: SPIN_DURATION,
+                  ease: [0.1, 0.7, 0.15, 1],
+                }
+          }
+          onAnimationComplete={handleAnimationComplete}
         >
           {reel.map((number, index) => (
             <span
               key={`${number}-${index}`}
               className={`${styles.slot} ${
-                hasWinner && index === winnerIndex && hasSettled
+                hasWinner &&
+                index === winnerIndex &&
+                hasSettled
                   ? styles.slotWinner
                   : ""
               }`}
@@ -75,7 +102,11 @@ export default function Roulette({ winnerNumber, spinKey, onSpinEnd }) {
             </span>
           ))}
         </motion.div>
-        <span className={styles.marker} aria-hidden="true" />
+
+        <span
+          className={styles.marker}
+          aria-hidden="true"
+        />
       </div>
     </div>
   );
