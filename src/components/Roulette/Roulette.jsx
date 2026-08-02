@@ -11,21 +11,34 @@ const SPIN_DURATION = 2.5; // segundos, conforme especificação
  * Roleta horizontal apenas ilustrativa.
  * O vencedor (`winnerNumber`) já deve ter sido recebido da API ANTES da
  * animação começar — este componente nunca decide o resultado, apenas o exibe.
+ *
+ * Se `winnerNumber` ainda não chegou (undefined/null), a roleta gira sem
+ * assentar em nada, em vez de quebrar o render.
  */
 export default function Roulette({ winnerNumber, spinKey, onSpinEnd }) {
   const reducedMotion = usePrefersReducedMotion();
   const [hasSettled, setHasSettled] = useState(false);
 
-  // Gera uma fita de números aleatórios terminando no vencedor real.
+  const hasWinner = winnerNumber !== undefined && winnerNumber !== null;
+
+  // Gera uma fita de números aleatórios terminando no vencedor real
+  // (ou só girando aleatoriamente, se o vencedor ainda não chegou).
   const reel = useMemo(() => {
     const randomSlots = Array.from({ length: 34 }, () =>
       formatParticipantNumber(Math.floor(Math.random() * 999999))
     );
-    return [...randomSlots, formatParticipantNumber(winnerNumber)];
-  }, [winnerNumber]);
 
-  const winnerIndex = reel.length - 1;
-  const targetOffset = -(winnerIndex * SLOT_WIDTH + SLOT_WIDTH / 2);
+    if (!hasWinner) {
+      return randomSlots;
+    }
+
+    return [...randomSlots, formatParticipantNumber(winnerNumber)];
+  }, [winnerNumber, hasWinner]);
+
+  const winnerIndex = hasWinner ? reel.length - 1 : null;
+  const targetOffset = hasWinner
+    ? -(winnerIndex * SLOT_WIDTH + SLOT_WIDTH / 2)
+    : 0;
 
   useEffect(() => {
     setHasSettled(false);
@@ -37,13 +50,14 @@ export default function Roulette({ winnerNumber, spinKey, onSpinEnd }) {
         <motion.div
           className={styles.track}
           initial={{ x: 0 }}
-          animate={{ x: reducedMotion ? targetOffset : targetOffset }}
+          animate={{ x: targetOffset }}
           transition={
-            reducedMotion
+            reducedMotion || !hasWinner
               ? { duration: 0 }
               : { duration: SPIN_DURATION, ease: [0.1, 0.7, 0.15, 1] }
           }
           onAnimationComplete={() => {
+            if (!hasWinner) return;
             setHasSettled(true);
             onSpinEnd?.();
           }}
@@ -52,7 +66,9 @@ export default function Roulette({ winnerNumber, spinKey, onSpinEnd }) {
             <span
               key={`${number}-${index}`}
               className={`${styles.slot} ${
-                index === winnerIndex && hasSettled ? styles.slotWinner : ""
+                hasWinner && index === winnerIndex && hasSettled
+                  ? styles.slotWinner
+                  : ""
               }`}
             >
               {number}

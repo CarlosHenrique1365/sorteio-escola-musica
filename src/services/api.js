@@ -4,11 +4,6 @@ import axios from "axios";
  * Instância central do Axios.
  * Configure VITE_API_URL no seu .env apontando para o webhook do n8n.
  * Ex: VITE_API_URL=https://seu-n8n.exemplo.com/webhook
- */
-/**
- * Instância central do Axios.
- * Configure VITE_API_URL no seu .env apontando para o webhook do n8n.
- * Ex: VITE_API_URL=https://seu-n8n.exemplo.com/webhook
  *
  * IMPORTANTE: o path do node Webhook no n8n foi configurado como "cadastro"
  * (sem UUID, sem "webhook-test" duplicado). A URL final chamada é:
@@ -16,19 +11,6 @@ import axios from "axios";
  * Então a baseURL deve terminar em ".../webhook" (produção) ou
  * ".../webhook-test" (enquanto testa no editor do n8n) — nunca os dois juntos.
  */  
-
-/**
- * Instância central do Axios.
- *
- * No arquivo .env:
- *
- * VITE_API_URL=https://n8n-n8n-30edfb-178-253-250-81.sslip.io/webhook
- *
- * Se o Webhook do n8n tiver o Path "login",
- * a chamada final será:
- *
- * https://n8n-n8n-30edfb-178-253-250-81.sslip.io/webhook/login
- */
 
 const api = axios.create({
 baseURL:
@@ -59,24 +41,14 @@ api.interceptors.request.use((config) => {
 /**
  * Cadastra um novo participante.
  */
-export async function cadastrarParticipante({
-  nome,
-  telefone,
-  instrumento,
-}) {
+export async function cadastrarParticipante({ nome, telefone, instrumento }) {
   try {
-    const { data } = await api.post("/cadastro", {
-      nome,
-      telefone,
-      instrumento,
-    });
-
+    const { data } = await api.post("/cadastro", { nome, telefone, instrumento });
     return data;
   } catch (error) {
-    if (error.response?.data) {
+    if (error.response?.data && "sucesso" in error.response.data) {
       return error.response.data;
     }
-
     throw error;
   }
 }
@@ -90,28 +62,6 @@ export async function listarParticipantes() {
   return data;
 }
 
-/**
- * Realiza o login do organizador.
- *
- * O n8n deve retornar algo como:
- *
- * {
- *   sucesso: true,
- *   mensagem: "Login realizado com sucesso",
- *   usuario: {
- *     id: 1,
- *     nome: "Carlos",
- *     email: "carlos@gmail.com"
- *   }
- * }
- *
- * ou:
- *
- * {
- *   sucesso: false,
- *   mensagem: "E-mail ou senha inválidos"
- * }
- */
 export async function login({ email, senha }) {
   const { data } = await api.post("/login", {
     email,
