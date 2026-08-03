@@ -223,36 +223,6 @@ export default function Cadastro() {
           )}
         </AnimatePresence>
 
-        <section className={styles.statsSection}>
-          <p>
-            <strong style={{ color: "var(--color-gold)" }}>
-              {(result?.totalParticipantes ?? "—").toLocaleString?.("pt-BR") ?? result?.totalParticipantes}
-            </strong>{" "}
-            participantes cadastrados
-          </p>
-          <Button variant="ghost" onClick={handleToggleList}>
-            <FiList />
-            {showList ? "Ocultar lista" : "Ver lista completa"}
-          </Button>
-        </section>
-
-        <AnimatePresence>
-          {showList && (
-            <motion.section
-              className={styles.tableSection}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.35 }}
-            >
-              <HistoryTable
-                rows={participantes}
-                variant="participantes"
-                emptyMessage={loadingList ? "Carregando participantes..." : "Nenhum participante ainda."}
-              />
-            </motion.section>
-          )}
-        </AnimatePresence>
       </main>
 
       <Footer />
