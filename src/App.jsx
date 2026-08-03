@@ -1,7 +1,7 @@
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import usePrefersReducedMotion from "./hooks/usePrefersReducedMotion";
 import Saturno from "./pages/Saturno/Saturno";
 import Cadastro from "./pages/Cadastro/Cadastro";
 import Login from "./pages/Login/Login";
@@ -10,7 +10,7 @@ import "./styles/global.css";
 
 export default function App() {
   return (
-    <ErrorBoundary>
+    <usePrefersReducedMotion>
       <AuthProvider>
         <HashRouter>
           <Routes>
@@ -28,6 +28,6 @@ export default function App() {
           </Routes>
         </HashRouter>
       </AuthProvider>
-    </ErrorBoundary>
+    </usePrefersReducedMotion>
   );
 }
