@@ -12,10 +12,22 @@ export default function usePrefersReducedMotion() {
   );
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const handler = (event) => setReduced(event.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
+
+    // Navegadores modernos
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handler);
+      return () => mediaQuery.removeEventListener("change", handler);
+    }
+
+    // Fallback para Safari antigo / WebViews (Instagram, Facebook, Android antigo)
+    if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handler);
+      return () => mediaQuery.removeListener(handler);
+    }
   }, []);
 
   return reduced;
