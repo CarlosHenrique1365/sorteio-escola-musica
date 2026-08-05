@@ -208,10 +208,13 @@ export default function Saturno() {
         className="content"
         style={{ transform: `translate(${tilt.x}px, ${tilt.y}px)` }}
       >
+        <p className="tagline">
+          Desenvolvido por
+        </p>
         <SaturnMark size={220} />
 
         <p className="tagline">
-          desenvolvido por <strong>Saturno IA Soluções</strong>
+         <strong>Saturno Soluções Digitais</strong>
         </p>
 
         <button className="star-btn" onClick={handleParticipar}>
@@ -221,7 +224,7 @@ export default function Saturno() {
               fill="#4fd8ff"
             />
           </svg>
-          Participe aqui
+          CLICK AQUI PARA PARTICIPAR
         </button>
       </div>
     </div>

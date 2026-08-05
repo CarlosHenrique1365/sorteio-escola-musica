@@ -65,9 +65,9 @@ export default function Login() {
           transition={{ duration: 0.4 }}
         >
           <Card pianoStripes className={styles.card}>
-            <h2 className={styles.title}>
+            <h1 className={styles.title}>
               Acesso do organizador
-            </h2>
+            </h1>
 
             <p className={styles.subtitle}>
               Entre para acompanhar cadastros e realizar o sorteio.
@@ -111,10 +111,7 @@ export default function Login() {
               {error && (
                 <p
                   role="alert"
-                  style={{
-                    color: "var(--color-error)",
-                    fontSize: "var(--fs-sm)",
-                  }}
+                  className={styles.error}
                 >
                   {error}
                 </p>
@@ -125,7 +122,9 @@ export default function Login() {
                 fullWidth
                 loading={loading}
               >
-                Entrar
+                <span className={styles.buttonText}>
+                  Entrar
+                </span>
               </Button>
             </form>
           </Card>
@@ -134,4 +133,3 @@ export default function Login() {
     </div>
   );
 }
-

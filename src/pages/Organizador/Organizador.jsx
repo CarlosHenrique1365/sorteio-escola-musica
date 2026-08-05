@@ -14,6 +14,13 @@ import { formatParticipantNumber } from "../../utils/format";
 import { listarParticipantes, sortear, buscarHistorico } from "../../services/api";
 import styles from "./Organizador.module.css";
 
+// Tipografia da marca STUGIORE — alternativas gratuitas (Google Fonts)
+// Fraunces      -> substitui Batusa Regular (títulos, destaques, números de vencedor)
+// Poppins Light -> substitui Nexa Light (textos correntes, rótulos e botões)
+// Importar no index.html: ver instruções no final da conversa
+const FONT_HEADING = "'Fraunces', serif";
+const FONT_BODY = "'Poppins', sans-serif";
+
 export default function Organizador() {
   const [totalParticipantes, setTotalParticipantes] = useState(0);
   const [historico, setHistorico] = useState([]);
@@ -101,9 +108,11 @@ export default function Organizador() {
         </section>
 
         <Card pianoStripes className={styles.drawCard}>
-          <h2 className={styles.drawTitle}>Sortear vencedor</h2>
+          <h2 className={styles.drawTitle} style={{ fontFamily: FONT_HEADING }}>
+            Sortear vencedor
+          </h2>
 
-          <label className={styles.checkboxRow}>
+          <label className={styles.checkboxRow} style={{ fontFamily: FONT_BODY }}>
             <input
               type="checkbox"
               checked={ignorarGanhadores}
@@ -113,14 +122,17 @@ export default function Organizador() {
           </label>
 
           {drawError && (
-            <p role="alert" style={{ color: "var(--color-error)", fontSize: "var(--fs-sm)" }}>
+            <p
+              role="alert"
+              style={{ color: "var(--color-error)", fontSize: "var(--fs-sm)", fontFamily: FONT_BODY }}
+            >
               {drawError}
             </p>
           )}
 
           <Button onClick={handleSortear} loading={drawing} disabled={spinning}>
             <FiPlay />
-            Sortear vencedor
+            <span style={{ fontFamily: FONT_BODY }}>Sortear vencedor</span>
           </Button>
 
           {drawError && !winner && (
@@ -130,10 +142,12 @@ export default function Organizador() {
               style={{ width: "100%" }}
             >
               <Card className={styles.winnerCard}>
-                <span className={styles.trophy} aria-hidden="true">
+                <span className={styles.trophy} style={{ fontFamily: FONT_HEADING }} aria-hidden="true">
                   🎉 Sorteio encerrado
                 </span>
-                <span className={styles.winnerName}>{drawError}</span>
+                <span className={styles.winnerName} style={{ fontFamily: FONT_BODY }}>
+                  {drawError}
+                </span>
               </Card>
             </motion.div>
           )}
@@ -151,12 +165,18 @@ export default function Organizador() {
                 style={{ width: "100%" }}
               >
                 <Card highlight className={styles.winnerCard}>
-                  <span className={styles.trophy} aria-hidden="true">
+                  <span className={styles.trophy} style={{ fontFamily: FONT_HEADING }} aria-hidden="true">
                     🏆 Vencedor
                   </span>
-                  <span className={styles.winnerNumber}>{formatParticipantNumber(winner.numero)}</span>
-                  <span className={styles.winnerName}>{winner.nome}</span>
-                  <span className={styles.winnerPhone}>{winner.telefone}</span>
+                  <span className={styles.winnerNumber} style={{ fontFamily: FONT_HEADING }}>
+                    {formatParticipantNumber(winner.numero)}
+                  </span>
+                  <span className={styles.winnerName} style={{ fontFamily: FONT_BODY }}>
+                    {winner.nome}
+                  </span>
+                  <span className={styles.winnerPhone} style={{ fontFamily: FONT_BODY }}>
+                    {winner.telefone}
+                  </span>
                 </Card>
               </motion.div>
             )}
@@ -164,7 +184,9 @@ export default function Organizador() {
         </Card>
 
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Histórico de sorteios</h2>
+          <h2 className={styles.sectionTitle} style={{ fontFamily: FONT_HEADING }}>
+            Histórico de sorteios
+          </h2>
           <HistoryTable rows={historico} variant="historico" emptyMessage="Nenhum sorteio realizado ainda." />
         </section>
       </main>

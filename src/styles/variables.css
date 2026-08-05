@@ -1,11 +1,20 @@
-/* ============================================================
-   DESIGN TOKENS — Identidade visual STUGIORE Escola de Música
-   TEMA CLARO. Paleta oficial da marca (navy, verde, vermelho),
-   reconstruída para fundo claro — texto, sombras e camadas
-   "glass" foram recalculados para manter contraste e legibilidade.
-   ============================================================ */
+@font-face {
+  font-family: "Batusa";
+  src: url("../assets/fonts/Batusa.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nexa";
+  src: url("../assets/fonts/Nexa-ExtraLight.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* Cores base */
   --color-bg: #f5f8fa;
   --color-panel: #eaf0f3;
   --color-card: #ffffff;
@@ -18,17 +27,14 @@
   --color-error: #d72828;
   --color-success: #1f8c6a;
 
-  /* Camadas translúcidas (glass) */
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(1, 63, 97, 0.12);
   --shadow-soft: 0 12px 40px rgba(15, 40, 60, 0.12);
   --shadow-gold-glow: 0 0 24px rgba(47, 143, 63, 0.28);
 
-  /* Tipografia */
-  --font-display: "Batusa", "Fraunces", "Georgia", serif;
-  --font-body: "Nexa", "Space Grotesk", "Helvetica Neue", sans-serif;
+--font-display: "Batusa", sans-serif;
+--font-body: "Nexa", sans-serif;
 
-  /* Escala */
   --fs-hero: clamp(2.4rem, 5vw + 1rem, 4.2rem);
   --fs-xl: clamp(1.6rem, 2.2vw + 1rem, 2.4rem);
   --fs-lg: 1.25rem;
@@ -36,19 +42,16 @@
   --fs-sm: 0.875rem;
   --fs-xs: 0.75rem;
 
-  /* Espaçamento */
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
   --space-md: 1.25rem;
   --space-lg: 2rem;
   --space-xl: 3.5rem;
 
-  /* Raio e bordas */
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
 
-  /* Transições */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 180ms;
   --dur-mid: 320ms;

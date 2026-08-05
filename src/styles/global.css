@@ -19,6 +19,7 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+  font-style: normal;
   font-size: var(--fs-md);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -28,8 +29,8 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
+  font-style: normal;
+  font-weight: 300;
   letter-spacing: -0.01em;
   margin: 0;
 }
@@ -40,12 +41,18 @@ p {
   line-height: 1.6;
 }
 
+span {
+  font-family: var(--font-body);
+  font-style: normal;
+}
+
 a {
   color: inherit;
 }
 
 button {
   font-family: var(--font-body);
+  font-style: normal;
 }
 
 ::selection {

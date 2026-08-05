@@ -2,29 +2,80 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: var(--space-md) var(--space-lg);
+
   border-bottom: 1px solid var(--color-border);
-  background: rgba(255, 255, 255, 0.75);  /* ← é essa linha */
+
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(10px);
+
   position: sticky;
   top: 0;
   z-index: 40;
 }
 
+/* =========================================
+   MARCA
+   ========================================= */
+
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
+}
+
+.logo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+/* Container das duas linhas */
+.brandText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  line-height: 1;
+}
+
+/* =========================================
+   STUDIORE
+   ========================================= */
+
+.studiore {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 400;
+
+  font-size: 1.55rem;
+  letter-spacing: 0.1em;
+
+  color: #013f61;
+}
+
+/* =========================================
+   ESCOLA DE MÚSICA
+   ========================================= */
+
+.school {
+  margin-top: 0.2rem;
+
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+
   color: var(--color-gold);
 }
 
-.brand svg {
-  color: var(--color-gold);
-}
+/* =========================================
+   AÇÕES
+   ========================================= */
 
 .actions {
   display: flex;
@@ -33,11 +84,38 @@
 }
 
 .userName {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+
   color: var(--color-text-secondary);
   font-size: var(--fs-sm);
 }
 
-.logo {
-     height: 40px;
-     width: auto;
-   }
+/* =========================================
+   RESPONSIVO
+   ========================================= */
+
+@media (max-width: 600px) {
+  .header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .studiore {
+    font-size: 1.05rem;
+  }
+
+  .school {
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+  }
+
+  .userName {
+    display: none;
+  }
+}

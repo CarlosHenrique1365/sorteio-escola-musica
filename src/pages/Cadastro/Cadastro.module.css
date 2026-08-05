@@ -22,6 +22,9 @@
 }
 
 .title {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 400;
   font-size: var(--fs-hero);
   line-height: 1.1;
 }
@@ -32,12 +35,30 @@
 }
 
 .subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
   font-size: var(--fs-lg);
+}
+.card {
+  width: min(400px, 100%);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--space-md);
+
+  box-sizing: border-box;
 }
 
 .formCard {
-  width: min(440px, 100%);
+  width: 100%;
+  max-width: 600px;
+
+  margin: 0 auto;
+
   padding-top: calc(var(--space-lg) + 6px);
+
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
@@ -60,11 +81,17 @@
 }
 
 .congrats {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 400;
   font-size: var(--fs-lg);
   color: var(--color-text);
 }
 
 .numberLabel {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
   font-size: var(--fs-sm);
   color: var(--color-text-secondary);
   text-transform: uppercase;
@@ -73,8 +100,8 @@
 
 .number {
   font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
+  font-style: normal;
+  font-weight: 400;
   font-size: clamp(3rem, 10vw, 5rem);
   color: var(--color-gold);
   line-height: 1;
@@ -101,3 +128,4 @@
 .tableSection {
   width: min(720px, 100%);
 }
+

@@ -1,36 +1,63 @@
 .card {
   position: relative;
+
+  width: 100%;
+  box-sizing: border-box;
+
   background: var(--glass-bg);
+
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
+
   padding: var(--space-lg);
+
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+
   box-shadow: var(--shadow-soft);
+
   overflow: hidden;
 }
 
-/* Listras douradas no topo, referência a teclas de piano (usado no Cadastro) */
+/* =========================================
+   LISTRAS — REFERÊNCIA ÀS TECLAS DE PIANO
+   ========================================= */
+
 .pianoStripes {
   position: absolute;
+
   top: 0;
   left: 0;
   right: 0;
+
   height: 6px;
+
   display: flex;
 }
+
 .pianoStripes span {
   flex: 1;
+
   border-right: 1px solid var(--color-bg);
 }
+
 .pianoStripes span:nth-child(odd) {
   background: var(--color-text);
 }
+
 .pianoStripes span:nth-child(even) {
   background: var(--color-gold);
 }
 
+/* =========================================
+   DESTAQUE
+   ========================================= */
+
 .highlight {
-  border-color: rgba(214, 160, 74, 0.4);
-  box-shadow: var(--shadow-soft), 0 0 0 1px rgba(214, 160, 74, 0.15) inset;
+  border-color: rgba(47, 143, 63, 0.4);
+
+  box-shadow:
+    var(--shadow-soft),
+    0 0 0 1px rgba(47, 143, 63, 0.15) inset;
 }
+
