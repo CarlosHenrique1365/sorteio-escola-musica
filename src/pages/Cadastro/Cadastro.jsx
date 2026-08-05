@@ -71,26 +71,16 @@ export default function Cadastro() {
     }
   }
 
-  async function handleShare() {
-    const shareData = {
-      title: "Escola de Música",
-      text: `Acabei de me cadastrar no sorteio da Escola de Música! Meu número é ${formatParticipantNumber(
-        result?.numero
-      )}.`,
-      url: window.location.origin,
-    };
+  function handleShare() {
+    const numero = formatParticipantNumber(result?.numero);
 
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch {
-        // Usuário cancelou o compartilhamento.
-      }
-    } else {
-      await navigator.clipboard.writeText(
-        `${shareData.text} ${shareData.url}`
-      );
-    }
+    const mensagem = `Acabei de me cadastrar no sorteio da Escola de Música! Meu número é ${numero}. 🎵`;
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+      mensagem
+    )}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -281,3 +271,4 @@ export default function Cadastro() {
     </div>
   );
 }
+
